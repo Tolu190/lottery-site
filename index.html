@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LotteryLive - Daily Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+  <style>
+    body { background-color: #f8f9fa; }
+    .countdown { font-size: 1.2rem; font-weight: bold; color: #dc3545; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">LotteryLive</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <div class="text-center mb-4">
+      <h2>Live Lottery Results</h2>
+      <div id="clock" class="mt-2"></div>
+      <div class="countdown mt-1">Next Draw in: <span id="countdown"></span></div>
+    </div>
+
+    <div class="row text-center">
+      <div class="col-md-4 mb-3"><div class="card"><div class="card-body"><h5>Morning Draw</h5><p class="fs-4 text-success">123456</p></div></div></div>
+      <div class="col-md-4 mb-3"><div class="card"><div class="card-body"><h5>Afternoon Draw</h5><p class="fs-4 text-success">654321</p></div></div></div>
+      <div class="col-md-4 mb-3"><div class="card"><div class="card-body"><h5>Evening Draw</h5><p class="fs-4 text-success">789012</p></div></div></div>
+    </div>
+
+    <h3 class="mt-5 mb-3">Result Archive</h3>
+    <div class="table-responsive mb-4">
+      <table id="resultsTable" class="table table-striped table-bordered">
+        <thead class="table-dark"><tr><th>Date</th><th>Time</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>2025-06-18</td><td>Morning</td><td>123456</td></tr>
+          <tr><td>2025-06-18</td><td>Afternoon</td><td>654321</td></tr>
+          <tr><td>2025-06-18</td><td>Evening</td><td>789012</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Admin Upload Form (Demo)</h4>
+    <form class="border p-3 bg-light rounded mb-5">
+      <div class="row g-2">
+        <div class="col-md-3"><input type="date" class="form-control" /></div>
+        <div class="col-md-3">
+          <select class="form-select">
+            <option selected>Select Time</option>
+            <option>Morning</option>
+            <option>Afternoon</option>
+            <option>Evening</option>
+          </select>
+        </div>
+        <div class="col-md-3"><input type="text" class="form-control" placeholder="Result" /></div>
+        <div class="col-md-3"><button type="submit" class="btn btn-primary w-100">Submit</button></div>
+      </div>
+    </form>
+  </div>
+
+  <footer class="bg-primary text-white text-center py-3">
+    &copy; 2025 LotteryLive. All rights reserved.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#resultsTable').DataTable();
+    });
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').innerText = now.toLocaleString();
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      let nextHour = 9;
+      if (now.getHours() < 9) nextHour = 9;
+      else if (now.getHours() < 15) nextHour = 15;
+      else if (now.getHours() < 21) nextHour = 21;
+      else nextHour = 33;
+
+      const next = new Date(now);
+      next.setHours(nextHour, 0, 0, 0);
+      const diff = next - now;
+
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+      document.getElementById('countdown').innerText = `${h}h ${m}m ${s}s`;
+    }
+
+    setInterval(updateClock, 1000);
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
